@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KiksDashboard - Portfolio, Finance & Parfums</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Chart.js pour les graphiques -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background: #0f172a;
+            color: #f1f5f9;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        .card {
+            background: #1e293b;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .nav-link:hover {
+            background: #334155;
+        }
+        
+        .nav-link.active {
+            background: #0ea5e9;
+            color: white;
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .parallax {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .parallax::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        input, select, textarea {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #f1f5f9;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            width: 100%;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+        
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 bg-gray-900 bg-opacity-95 backdrop-blur-sm border-b border-gray-800 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-dashboard text-white"></i>
+                    </div>
+                    <h1 class="text-xl font-bold gradient-text hidden sm:block">KiksDashboard</h1>
+                </div>
+                
+                <nav class="flex gap-2">
+                    <button class="nav-link active" onclick="showPage('home')">
+                        <i class="fas fa-home mr-2"></i>Accueil
+                    </button>
+                    <button class="nav-link" onclick="showPage('portfolio')">
+                        <i class="fas fa-briefcase mr-2"></i>Portfolio
+                    </button>
+                    <button class="nav-link" onclick="showPage('finance')">
+                        <i class="fas fa-chart-line mr-2"></i>Finance
+                    </button>
+                    <button class="nav-link" onclick="showPage('perfumes')">
+                        <i class="fas fa-flask mr-2"></i>Parfums
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-20 min-h-screen">
+        <!-- Page Accueil -->
+        <div id="home" class="page active">
+            <section class="parallax py-20 px-4">
+                <div class="container mx-auto max-w-6xl text-center relative z-10">
+                    <h2 class="text-6xl font-bold mb-6 gradient-text">KiksDashboard</h2>
+                    <p class="text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                        Dashboard multifonctionnel moderne combinant portfolio professionnel,
+                        suivi financier et gestion de parfums
+                    </p>
+                    <div class="flex gap-4 justify-center flex-wrap">
+                        <button class="btn-primary" onclick="showPage('portfolio')">
+                            Découvrir mon Portfolio
+                        </button>
+                        <button class="btn-primary" onclick="showPage('finance')">
+                            Suivi Financier
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-16 px-4">
+                <div class="container mx-auto max-w-6xl">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="card cursor-pointer" onclick="showPage('portfolio')">
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-briefcase text-white text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-3">Portfolio</h3>
+                            <p class="text-gray-400">CV interactif avec expériences, compétences et formation</p>
+                        </div>
+
+                        <div class="card cursor-pointer" onclick="showPage('finance')">
+                            <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-chart-line text-white text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-3">Finance</h3>
+                            <p class="text-gray-400">Suivi d'actifs boursiers en temps réel avec graphiques</p>
+                        </div>
+
+                        <div class="card cursor-pointer" onclick="showPage('perfumes')">
+                            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fas fa-flask text-white text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-3">Parfums</h3>
+                            <p class="text-gray-400">Gestion de collection avec recommandations météo</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Page Portfolio -->
+        <div id="portfolio" class="page">
+            <div class="container mx-auto max-w-6xl px-4 py-8">
+                <h2 class="text-4xl font-bold mb-8 gradient-text">
+                    <i class="fas fa-briefcase mr-3"></i>Mon Portfolio
+                </h2>
+
+                <!-- Header CV -->
+                <div class="card mb-8">
+                    <div class="flex flex-col md:flex-row gap-6 items-center md:items-start">
+                        <div class="w-32 h-32 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-4xl font-bold text-white">
+                            CP
+                        </div>
+                        <div class="flex-1 text-center md:text-left">
+                            <h3 class="text-3xl font-bold mb-2" id="cv-name">Votre Nom</h3>
+                            <p class="text-2xl text-blue-400 mb-4" id="cv-title">Chef de Projet chez ICDC</p>
+                            <div class="flex flex-wrap gap-4 justify-center md:justify-start text-gray-400">
+                                <div><i class="fas fa-envelope mr-2"></i><span id="cv-email">contact@example.com</span></div>
+                                <div><i class="fas fa-phone mr-2"></i><span id="cv-phone">+33 X XX XX XX XX</span></div>
+                                <div><i class="fas fa-map-marker-alt mr-2"></i><span id="cv-location">France</span></div>
+                            </div>
+                        </div>
+                        <button class="btn-primary" onclick="editCV()">
+                            <i class="fas fa-edit mr-2"></i>Modifier
+                        </button>
+                    </div>
+                    <div class="mt-6 pt-6 border-t border-gray-700">
+                        <p class="text-gray-300 leading-relaxed" id="cv-summary">
+                            Chef de projet passionné avec expertise en gestion de projets IT et développement d'applications.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Expériences -->
+                <div class="mb-8">
+                    <h3 class="text-3xl font-bold mb-6">
+                        <i class="fas fa-briefcase mr-3"></i>Expériences Professionnelles
+                    </h3>
+                    <div id="experiences-list" class="space-y-6"></div>
+                </div>
+
+                <!-- Formation -->
+                <div class="mb-8">
+                    <h3 class="text-3xl font-bold mb-6">
+                        <i class="fas fa-graduation-cap mr-3"></i>Formation
+                    </h3>
+                    <div id="education-list" class="space-y-4"></div>
+                </div>
+
+                <!-- Compétences -->
+                <div>
+                    <h3 class="text-3xl font-bold mb-6">
+                        <i class="fas fa-code mr-3"></i>Compétences
+                    </h3>
+                    <div id="skills-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Finance -->
+        <div id="finance" class="page">
+            <div class="container mx-auto max-w-7xl px-4 py-8">
+                <h2 class="text-4xl font-bold mb-8 gradient-text">
+                    <i class="fas fa-chart-line mr-3"></i>Suivi Financier
+                </h2>
+
+                <div class="card mb-8">
+                    <div class="flex gap-2">
+                        <input 
+                            type="text" 
+                            id="stock-search" 
+                            placeholder="Rechercher un actif (ex: AAPL, TSLA, BTC-USD)..."
+                            class="flex-1"
+                        >
+                        <button class="btn-primary" onclick="addStock()">
+                            <i class="fas fa-plus mr-2"></i>Ajouter
+                        </button>
+                    </div>
+                </div>
+
+                <div id="stocks-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Les actions seront ajoutées ici -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Parfums -->
+        <div id="perfumes" class="page">
+            <div class="container mx-auto max-w-7xl px-4 py-8">
+                <h2 class="text-4xl font-bold mb-8 gradient-text">
+                    <i class="fas fa-flask mr-3"></i>Gestion de Parfums
+                </h2>
+
+                <!-- Météo -->
+                <div class="card mb-8 bg-gradient-to-br from-purple-900/20 to-blue-900/20">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-2">
+                                <i class="fas fa-cloud-sun mr-2"></i>Météo
+                            </h3>
+                            <p class="text-gray-400" id="weather-desc">Chargement...</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-5xl font-bold text-blue-400" id="weather-temp">--°C</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <button class="btn-primary" onclick="showAddPerfumeModal()">
+                        <i class="fas fa-plus mr-2"></i>Ajouter un Parfum
+                    </button>
+                </div>
+
+                <div id="perfumes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Les parfums seront ajoutés ici -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Ajout Parfum -->
+    <div id="perfume-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden flex items-center justify-center p-4">
+        <div class="card max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold">Ajouter un Parfum</h3>
+                <button onclick="hideAddPerfumeModal()" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <form id="perfume-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Nom</label>
+                    <input type="text" id="perfume-name" required placeholder="Sauvage">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Marque</label>
+                    <input type="text" id="perfume-brand" required placeholder="Dior">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Type</label>
+                    <select id="perfume-type">
+                        <option value="fresh">Fresh</option>
+                        <option value="warm">Warm</option>
+                        <option value="floral">Floral</option>
+                        <option value="woody">Woody</option>
+                        <option value="oriental">Oriental</option>
+                        <option value="citrus">Citrus</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Notes (séparées par des virgules)</label>
+                    <input type="text" id="perfume-notes" required placeholder="bergamote, poivre, ambroxan">
+                </div>
+                <div class="flex gap-4 pt-4">
+                    <button type="submit" class="btn-primary flex-1">Ajouter</button>
+                    <button type="button" onclick="hideAddPerfumeModal()" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

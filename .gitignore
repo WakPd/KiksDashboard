@@ -1,0 +1,46 @@
+# Fichiers et dossiers à ignorer
+
+# Node modules (si jamais installés par erreur)
+node_modules/
+package-lock.json
+
+# Fichiers de build
+dist/
+build/
+
+# Fichiers temporaires
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+
+# Scripts de nettoyage et installation (pas nécessaires en production)
+cleanup.bat
+create-*.mjs
+setup*.mjs
+install*.bat
+install*.mjs
+START.bat
+full-setup.bat
+
+# Documentation de développement (garder seulement README.md)
+CORRECTIF.md
+FILES_INDEX.md
+GUIDE_INSTALLATION.md
+HOW_TO_START.md
+LISEZMOI.md
+LISTE_FICHIERS.md
+PROJET_COMPLETE.md
+QUICKSTART.md
+START.md
+GIT_SETUP.md
