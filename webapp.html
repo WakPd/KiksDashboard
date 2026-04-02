@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KiksDashboard - Portfolio, Finance & Parfums</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,146 +18,281 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
+        :root {
+            --bg-main: #071018;
+            --bg-panel: rgba(10, 24, 38, 0.75);
+            --bg-panel-solid: #0f1f31;
+            --text-main: #e2eefb;
+            --text-soft: #98abc0;
+            --line-soft: rgba(161, 184, 208, 0.24);
+            --brand-1: #2dd4bf;
+            --brand-2: #38bdf8;
+            --brand-3: #f59e0b;
+            --hero-glow: rgba(45, 212, 191, 0.2);
+        }
+
         * {
             scroll-behavior: smooth;
+            box-sizing: border-box;
         }
-        
+
         body {
-            background: #0f172a;
-            color: #f1f5f9;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            background:
+                radial-gradient(70rem 38rem at 8% -10%, rgba(56, 189, 248, 0.22), transparent 55%),
+                radial-gradient(52rem 28rem at 92% 12%, rgba(245, 158, 11, 0.18), transparent 62%),
+                linear-gradient(160deg, #04080f 0%, var(--bg-main) 48%, #0a1827 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-        
+
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::before {
+            background-image: radial-gradient(rgba(161, 184, 208, 0.18) 0.6px, transparent 0.6px);
+            background-size: 22px 22px;
+            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent 82%);
+        }
+
+        body::after {
+            background: linear-gradient(180deg, transparent 0%, rgba(5, 10, 18, 0.7) 100%);
+        }
+
         .card {
-            background: #1e293b;
-            border-radius: 1rem;
+            background: var(--bg-panel);
+            border: 1px solid var(--line-soft);
+            backdrop-filter: blur(10px);
+            border-radius: 1.15rem;
             padding: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+            transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
         }
-        
+
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            transform: translateY(-6px);
+            border-color: rgba(56, 189, 248, 0.52);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(45, 212, 191, 0.18) inset;
         }
-        
+
         .btn-primary {
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            border: none;
+            background: linear-gradient(132deg, var(--brand-1) 0%, var(--brand-2) 60%, #1d9bf0 100%);
+            color: #032737;
+            padding: 0.78rem 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.14);
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
         }
-        
+
         .btn-primary:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4);
+            transform: translateY(-2px);
+            filter: brightness(1.03);
+            box-shadow: 0 14px 28px rgba(10, 46, 74, 0.45);
         }
-        
+
         .gradient-text {
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            background: linear-gradient(112deg, #d6fff7 0%, #7dd3fc 44%, #fcd47f 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
+        h1, h2, h3, h4 {
+            font-family: 'Sora', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        header {
+            background: linear-gradient(180deg, rgba(7, 16, 24, 0.95) 0%, rgba(7, 16, 24, 0.82) 100%);
+            border-bottom: 1px solid rgba(125, 211, 252, 0.2);
+            backdrop-filter: blur(14px);
+        }
+
         .nav-link {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
+            padding: 0.6rem 1rem;
+            border-radius: 999px;
+            transition: all 0.25s ease;
             cursor: pointer;
+            border: 1px solid transparent;
+            color: #dbeafe;
+            font-weight: 600;
+            white-space: nowrap;
         }
-        
+
         .nav-link:hover {
-            background: #334155;
+            background: rgba(125, 211, 252, 0.1);
+            border-color: rgba(125, 211, 252, 0.25);
         }
-        
+
         .nav-link.active {
-            background: #0ea5e9;
-            color: white;
+            background: linear-gradient(120deg, rgba(45, 212, 191, 0.22) 0%, rgba(56, 189, 248, 0.22) 100%);
+            border-color: rgba(45, 212, 191, 0.6);
+            color: #d6fff7;
+            box-shadow: 0 0 22px rgba(45, 212, 191, 0.18);
         }
-        
+
         .page {
             display: none;
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.55s ease;
         }
-        
+
         .page.active {
             display: block;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(18px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .parallax {
             position: relative;
             overflow: hidden;
+            border-bottom: 1px solid rgba(125, 211, 252, 0.12);
         }
-        
+
         .parallax::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
+            inset: -40%;
+            background:
+                radial-gradient(circle at 28% 32%, var(--hero-glow) 0%, transparent 44%),
+                radial-gradient(circle at 70% 64%, rgba(245, 158, 11, 0.14) 0%, transparent 40%);
+            animation: rotate 24s linear infinite;
         }
-        
+
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-        
+
+        .hero-shell {
+            border: 1px solid rgba(125, 211, 252, 0.2);
+            background: linear-gradient(155deg, rgba(10, 24, 38, 0.86) 0%, rgba(15, 31, 49, 0.72) 100%);
+            backdrop-filter: blur(8px);
+            border-radius: 1.4rem;
+            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.3);
+        }
+
+        .badge-soft {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            border: 1px solid rgba(125, 211, 252, 0.32);
+            background: rgba(56, 189, 248, 0.1);
+            color: #d8f7ff;
+            border-radius: 999px;
+            padding: 0.42rem 0.9rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .stagger-in {
+            opacity: 0;
+            transform: translateY(14px);
+            animation: riseIn 0.75s ease forwards;
+        }
+
+        .stagger-in:nth-child(1) { animation-delay: 0.08s; }
+        .stagger-in:nth-child(2) { animation-delay: 0.16s; }
+        .stagger-in:nth-child(3) { animation-delay: 0.24s; }
+
+        @keyframes riseIn {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         input, select, textarea {
-            background: #0f172a;
-            border: 1px solid #334155;
-            color: #f1f5f9;
+            background: rgba(8, 18, 29, 0.78);
+            border: 1px solid rgba(161, 184, 208, 0.2);
+            color: var(--text-main);
             padding: 0.75rem;
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
             width: 100%;
         }
-        
+
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #0ea5e9;
-            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+            border-color: rgba(45, 212, 191, 0.8);
+            box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.12);
         }
-        
+
+        .text-gray-400,
+        .text-gray-500,
+        .text-gray-300 {
+            color: var(--text-soft) !important;
+        }
+
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 9px;
         }
-        
+
         ::-webkit-scrollbar-track {
-            background: #1e293b;
+            background: #0a1624;
         }
-        
+
         ::-webkit-scrollbar-thumb {
-            background: #475569;
+            background: #32506f;
             border-radius: 5px;
         }
-        
+
         ::-webkit-scrollbar-thumb:hover {
-            background: #64748b;
+            background: #3c658e;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                gap: 0.4rem;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 0.25rem;
+            }
+
+            .nav-link {
+                padding: 0.52rem 0.8rem;
+                font-size: 0.84rem;
+            }
+
+            h2 {
+                font-size: 2rem !important;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 bg-gray-900 bg-opacity-95 backdrop-blur-sm border-b border-gray-800 z-50">
+    <header class="fixed top-0 left-0 right-0 z-50">
         <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between h-16">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-3 sm:h-20">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-teal-400 via-sky-400 to-amber-300 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-500/20">
                         <i class="fas fa-dashboard text-white"></i>
                     </div>
-                    <h1 class="text-xl font-bold gradient-text hidden sm:block">KiksDashboard</h1>
+                    <h1 class="text-xl font-bold gradient-text">KiksDashboard</h1>
                 </div>
                 
                 <nav class="flex gap-2">
@@ -176,23 +314,29 @@
     </header>
 
     <!-- Main Content -->
-    <main class="pt-20 min-h-screen">
+    <main class="pt-28 sm:pt-24 min-h-screen">
         <!-- Page Accueil -->
         <div id="home" class="page active">
             <section class="parallax py-20 px-4">
-                <div class="container mx-auto max-w-6xl text-center relative z-10">
-                    <h2 class="text-6xl font-bold mb-6 gradient-text">KiksDashboard</h2>
-                    <p class="text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                <div class="container mx-auto max-w-6xl relative z-10">
+                    <div class="hero-shell px-6 py-10 md:px-12 md:py-14 text-center">
+                        <span class="badge-soft mb-6">
+                            <i class="fas fa-bolt"></i>
+                            Interface premium multi-modules
+                        </span>
+                        <h2 class="text-5xl md:text-7xl font-bold mb-6 gradient-text">KiksDashboard</h2>
+                        <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed">
                         Dashboard multifonctionnel moderne combinant portfolio professionnel,
                         suivi financier et gestion de parfums
-                    </p>
-                    <div class="flex gap-4 justify-center flex-wrap">
-                        <button class="btn-primary" onclick="showPage('portfolio')">
-                            Découvrir mon Portfolio
-                        </button>
-                        <button class="btn-primary" onclick="showPage('finance')">
-                            Suivi Financier
-                        </button>
+                        </p>
+                        <div class="flex gap-4 justify-center flex-wrap">
+                            <button class="btn-primary" onclick="showPage('portfolio')">
+                                Découvrir mon Portfolio
+                            </button>
+                            <button class="btn-primary" onclick="showPage('finance')">
+                                Suivi Financier
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -200,7 +344,7 @@
             <section class="py-16 px-4">
                 <div class="container mx-auto max-w-6xl">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div class="card cursor-pointer" onclick="showPage('portfolio')">
+                        <div class="card cursor-pointer stagger-in" onclick="showPage('portfolio')">
                             <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center mb-4">
                                 <i class="fas fa-briefcase text-white text-2xl"></i>
                             </div>
@@ -208,7 +352,7 @@
                             <p class="text-gray-400">CV interactif avec expériences, compétences et formation</p>
                         </div>
 
-                        <div class="card cursor-pointer" onclick="showPage('finance')">
+                        <div class="card cursor-pointer stagger-in" onclick="showPage('finance')">
                             <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center mb-4">
                                 <i class="fas fa-chart-line text-white text-2xl"></i>
                             </div>
@@ -216,7 +360,7 @@
                             <p class="text-gray-400">Suivi d'actifs boursiers en temps réel avec graphiques</p>
                         </div>
 
-                        <div class="card cursor-pointer" onclick="showPage('perfumes')">
+                        <div class="card cursor-pointer stagger-in" onclick="showPage('perfumes')">
                             <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl flex items-center justify-center mb-4">
                                 <i class="fas fa-flask text-white text-2xl"></i>
                             </div>
